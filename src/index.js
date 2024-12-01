@@ -9,42 +9,18 @@ const app = express();
 app.use(bodyParser.json());
 
 const pool = createPool({
-  host: process.env.MYSQLDB_HOST,
-  user: "root",
-  password: process.env.MYSQLDB_ROOT_PASSWORD,
-  database: process.env.MYSQLDB_DATABASE,
-  port: process.env.MYSQLDB_DOCKER_PORT,
-});
-
-pool.on("connection", (req, res) => {
-  try {
-    console.log("DB Connected!");
-  } catch (err) {
-    console.log("Not Connected!!!!!");
-  }
-});
-
-app.get("/ping", async (req, res) => {
-  try {
-    const [result] = await pool.query("SELECT NOW()");
-    console.log("SELECT NOW()");
-    res.json(result);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error connecting to database");
-    console.log("Error connecting to database");
-  }
+  host: "localhost",  // host: "host.docker.internal",
+  user: "cartagorem",
+  password: "test123",
+  database: "mangodb",
 });
 
 app.listen(process.env.NODE_LOCAL_PORT || 3000, () => {
-  console.log("--------------------------------------------");
   console.log("Server running on port", process.env.NODE_LOCAL_PORT || 3000);
-  console.log({ host: process.env.MYSQLDB_HOST });
-  console.log({ user: "root" });
-  console.log({ password: process.env.MYSQLDB_ROOT_PASSWORD });
-  console.log({ database: process.env.MYSQLDB_DATABASE });
-  console.log({ port: process.env.MYSQLDB_DOCKER_PORT });
-  console.log("--------------------------------------------");
+  console.log({ host: "localhost" });
+  console.log({ user: "cartagorem" });
+  console.log({ password: "test123" });
+  console.log({ database: "mangodb" });
 });
 
 // Routes
@@ -57,11 +33,10 @@ app.get('/api/saludo', (req, res) => {
   }
 });
 
-
 // GET Endpoint for fetching data from a table
-app.get("/users", async (req, res) => {
+app.get("/fruits", async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM users");
+    const [rows] = await pool.query("SELECT * FROM Fruits");
     res.json(rows);
   } catch (err) {
     console.error(err);
@@ -69,17 +44,3 @@ app.get("/users", async (req, res) => {
     console.log("Error fetching data from the database");
   }
 });
-
-// POST Endpoint for inserting data into the users table
-// app.post("/users", async (req, res) => {
-//   try {
-//     const { name } = req.body;
-//     const [result] = await pool.query("INSERT INTO users (name) VALUES (?)", [name]);
-//     res.status(201).json({ result, name }); // por revisar
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error inserting data into the database");
-//     console.log("Error inserting data into the database");
-//   }
-// });
-

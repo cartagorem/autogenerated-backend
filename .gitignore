@@ -4,6 +4,7 @@ package-lock.json
 node_modules/
 
 docker-compose.yml
+docker-compose.prod.yml
 docker-compose.dev.yml
 
 .vscode/
