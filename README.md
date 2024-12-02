@@ -15,6 +15,10 @@ docker logs <PROCESS-ID> # works good with deattach mode
 # delete image
 docker rmi <IMAGE-ID> [-f] # -f means force kill
 
-docker ps # lsit running containers
+docker ps # list running containers
 docker kill <PROCESS-ID>
 ```
+
+Todo:
+
+- [ ] connect container to database located on the _HOST_ as a service
